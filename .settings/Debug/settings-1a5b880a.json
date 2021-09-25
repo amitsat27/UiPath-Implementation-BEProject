@@ -4,6 +4,7 @@
   "UiPath.UiAutomation.Activities.Generic.TimeoutMS": "30000",
   "UiPath.UiAutomation.Activities.Generic.WaitForReady": "INTERACTIVE",
   "UiPath.UiAutomation.Activities.Generic.AlterIfDisabled": "False",
+  "UiPath.UiAutomation.Activities.Generic.CaptureScreenshots": "True",
   "UiPath.UiAutomation.Activities.Browser.BrowserType": "IE",
   "UiPath.UiAutomation.Activities.Browser.Private": "False",
   "UiPath.UiAutomation.Activities.Browser.NewSession": "False",
@@ -11,6 +12,8 @@
   "UiPath.UiAutomation.Activities.Browser.CommunicationMethod": "Native",
   "UiPath.UiAutomation.Activities.Browser.UserDataFolderMode": "Automatic",
   "UiPath.UiAutomation.Activities.Browser.UserDataFolderPath": "",
+  "UiPath.UiAutomation.Activities.Browser.RuntimeBrowser": "None",
+  "UiPath.UiAutomation.Activities.RobotLogging.LogTargetInfo": "False",
   "UiPath.UiAutomation.Activities.Callout.Timer": "0",
   "UiPath.UiAutomation.Activities.DataScrape.DelayBetweenPagesMS": "300",
   "UiPath.UiAutomation.Activities.ElementExists.TimeoutMS": "30000",
@@ -23,8 +26,5 @@
   "UiPath.UiAutomation.Activities.MouseEvents.SendWindowMessages": "False",
   "UiPath.UiAutomation.Activities.MouseEvents.SimulateClick": "False",
   "UiPath.UiAutomation.Activities.MouseEvents.SimulateHover": "False",
-  "UiPath.UiAutomation.Activities.Screenshot.WaitBefore": "300",
-  "UiPath.UiAutomation.Activities.Generic.CaptureScreenshots": "True",
-  "UiPath.UiAutomation.Activities.Browser.RuntimeBrowser": "None",
-  "UiPath.UiAutomation.Activities.RobotLogging.LogTargetInfo": "False"
+  "UiPath.UiAutomation.Activities.Screenshot.WaitBefore": "300"
 }

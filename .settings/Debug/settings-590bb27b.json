@@ -7,7 +7,7 @@
   "UiPath.UiAutomation.Activities.GoogleOCR.DeniedCharacters": "",
   "UiPath.UiAutomation.Activities.GoogleOCR.Invert": "False",
   "UiPath.UiAutomation.Activities.GoogleOCR.Profile": "Legacy",
-  "UiPath.UiAutomation.Activities.GoogleOCR.Scale": "2",
+  "UiPath.UiAutomation.Activities.GoogleOCR.Scale": "1",
   "UiPath.UiAutomation.Activities.GoogleOCR.Language": "eng",
   "UiPath.UiAutomation.Activities.MicrosoftOCR.Profile": "Legacy",
   "UiPath.UiAutomation.Activities.MicrosoftOCR.Scale": "1",

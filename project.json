@@ -1,7 +1,7 @@
 {
   "name": "ExcelAutomationDemo",
   "description": "Excel automation demo using sample use cases.",
-  "main": "Main.xaml",
+  "main": "MasterBot.xaml",
   "dependencies": {
     "BalaReva.EasyDataTable.Activities": "[3.0.1]",
     "BalaReva.ZipUnzipGz.Activities": "[2.0.0]",
@@ -44,8 +44,8 @@
   "expressionLanguage": "VisualBasic",
   "entryPoints": [
     {
-      "filePath": "Main.xaml",
-      "uniqueId": "ee24f4b0-c1d0-427d-ac9a-401ba64392dc",
+      "filePath": "MasterBot.xaml",
+      "uniqueId": "8125b885-a1fc-4613-9f56-ab0b158fc77e",
       "input": [],
       "output": []
     }

@@ -2,12 +2,12 @@
   <x:Members>
     <x:Property Name="in_percentage" Type="InArgument(x:Double)" />
     <x:Property Name="in_BranchDT" Type="InArgument(sd:DataTable)" />
-    <x:Property Name="in_companyName" Type="InArgument(x:String)" />
+    <x:Property Name="in_cName" Type="InArgument(x:String)" />
   </x:Members>
   <mva:VisualBasic.Settings>
     <x:Null />
   </mva:VisualBasic.Settings>
-  <sap:VirtualizedContainerService.HintSize>788,3544.8</sap:VirtualizedContainerService.HintSize>
+  <sap:VirtualizedContainerService.HintSize>788,3716</sap:VirtualizedContainerService.HintSize>
   <sap2010:WorkflowViewState.IdRef>ChangeDataType_1</sap2010:WorkflowViewState.IdRef>
   <TextExpression.NamespacesForImplementation>
     <scg:List x:TypeArguments="x:String" Capacity="72">
@@ -92,18 +92,14 @@
       <AssemblyReference>System.Runtime.WindowsRuntime</AssemblyReference>
     </scg:List>
   </TextExpression.ReferencesForImplementation>
-  <Sequence sap2010:Annotation.AnnotationText="Dec: Fetches two excel sheets StudentData and GrNumbers and joins tables using inner join and writes to a Company Sheet.xlsx file." DisplayName="Fetch Student Data" sap:VirtualizedContainerService.HintSize="576.8,3480" sap2010:WorkflowViewState.IdRef="Sequence_1">
+  <Sequence sap2010:Annotation.AnnotationText="Dec: Fetches two excel sheets StudentData and GrNumbers and joins tables using inner join and writes to a Company Sheet.xlsx file." DisplayName="Fetch Student Data" sap:VirtualizedContainerService.HintSize="576.8,3651.2" sap2010:WorkflowViewState.IdRef="Sequence_1">
     <Sequence.Variables>
       <Variable x:TypeArguments="sd:DataTable" Name="OutDT_GRNumbers" />
       <Variable x:TypeArguments="sd:DataTable" Name="OutDT_StudentData" />
       <Variable x:TypeArguments="sd:DataTable" Name="FinalTable" />
       <Variable x:TypeArguments="sd:DataTable" Name="BranchDT" />
       <Variable x:TypeArguments="x:String" Name="companyName" />
-      <Variable x:TypeArguments="x:String" Name="OutputFilePath">
-        <Variable.Default>
-          <Literal x:TypeArguments="x:String">D:\Downloads\UiPath\ExcelAutomationDemo\Data\Output\</Literal>
-        </Variable.Default>
-      </Variable>
+      <Variable x:TypeArguments="x:String" Default="D:\Downloads\UiPath\ExcelAutomationDemo\Data\Output\" Name="OutputFilePath" />
     </Sequence.Variables>
     <sap:WorkflowViewStateService.ViewState>
       <scg:Dictionary x:TypeArguments="x:String, x:Object">
@@ -119,7 +115,7 @@
       </ui:ReadRange.Range>
     </ui:ReadRange>
     <be:ColumnDataTypeConvertor ColumnName="{x:Null}" NullValue="{x:Null}" ColumnDataType="x:Int32" ColumnIndex="[{0}]" DisplayName="Change Column DataType" sap:VirtualizedContainerService.HintSize="535.2,22.4" sap2010:WorkflowViewState.IdRef="ColumnDataTypeConvertor_1" InDataTable="[OutDT_GRNumbers]" OutDataTable="[OutDT_GRNumbers]" />
-    <be:ShowDataTable AllowColumnWordWrap="False" DisplayName="Show DataTable" sap:VirtualizedContainerService.HintSize="535.2,22.4" sap2010:WorkflowViewState.IdRef="ShowDataTable_1" InputDataTable="[OutDT_GRNumbers]" Title="Datatable View" />
+    <be:ShowDataTable AllowColumnWordWrap="False" DisplayName="Show DataTable" sap:VirtualizedContainerService.HintSize="535.2,22.4" sap2010:WorkflowViewState.IdRef="ShowDataTable_1" InputDataTable="[OutDT_GRNumbers]" Title="Student Responses" />
     <ui:ReadRange AddHeaders="True" DataTable="[OutDT_StudentData]" DisplayName="Read Range- Student Master Data" sap:VirtualizedContainerService.HintSize="535.2,88" sap2010:WorkflowViewState.IdRef="ReadRange_2" SheetName="Sheet1" WorkbookPath="Data\StudentData.xlsx">
       <ui:ReadRange.Range>
         <InArgument x:TypeArguments="x:String">
@@ -128,7 +124,18 @@
       </ui:ReadRange.Range>
     </ui:ReadRange>
     <be:ColumnDataTypeConvertor ColumnName="{x:Null}" NullValue="{x:Null}" ColumnDataType="x:Int32" ColumnIndex="[{0}]" DisplayName="Change Column DataType" sap:VirtualizedContainerService.HintSize="535.2,22.4" sap2010:WorkflowViewState.IdRef="ColumnDataTypeConvertor_2" InDataTable="[OutDT_StudentData]" OutDataTable="[OutDT_StudentData]" />
-    <be:ShowDataTable AllowColumnWordWrap="False" DisplayName="Show DataTable" sap:VirtualizedContainerService.HintSize="535.2,22.4" sap2010:WorkflowViewState.IdRef="ShowDataTable_2" InputDataTable="[OutDT_StudentData]" Title="Datatable View" />
+    <ui:CommentOut DisplayName="Comment Out" sap:VirtualizedContainerService.HintSize="535.2,193.6" sap2010:WorkflowViewState.IdRef="CommentOut_7">
+      <ui:CommentOut.Body>
+        <Sequence DisplayName="Ignored Activities" sap:VirtualizedContainerService.HintSize="241.6,115.2" sap2010:WorkflowViewState.IdRef="Sequence_12">
+          <sap:WorkflowViewStateService.ViewState>
+            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            </scg:Dictionary>
+          </sap:WorkflowViewStateService.ViewState>
+          <be:ShowDataTable AllowColumnWordWrap="False" DisplayName="Show DataTable" sap:VirtualizedContainerService.HintSize="200,22.4" sap2010:WorkflowViewState.IdRef="ShowDataTable_2" InputDataTable="[OutDT_StudentData]" Title="Student Master Database" />
+        </Sequence>
+      </ui:CommentOut.Body>
+    </ui:CommentOut>
     <ui:JoinDataTables sap2010:Annotation.AnnotationText="Desc: Fetching Data of Registered Students using GR Number from Student Master Data." DataTable1="[OutDT_StudentData]" DataTable2="[OutDT_GRNumbers]" DisplayName="Join Data Tables-  Fetching Student Data" sap:VirtualizedContainerService.HintSize="535.2,104" sap2010:WorkflowViewState.IdRef="JoinDataTables_1" JoinType="Inner" OutputDataTable="[FinalTable]">
       <ui:JoinDataTables.Arguments>
         <scg:List x:TypeArguments="ui:JoinOperationArgument" Capacity="4">
@@ -237,13 +244,13 @@
     </ui:CommentOut>
     <ui:RemoveDataColumn Column="{x:Null}" ColumnName="{x:Null}" ColumnIndex="18" DataTable="[FinalTable]" DisplayName="Remove Data Column" sap:VirtualizedContainerService.HintSize="535.2,188" sap2010:WorkflowViewState.IdRef="RemoveDataColumn_2" />
     <ui:RemoveDataColumn Column="{x:Null}" ColumnName="{x:Null}" ColumnIndex="17" DataTable="[FinalTable]" DisplayName="Remove Data Column" sap:VirtualizedContainerService.HintSize="535.2,188" sap2010:WorkflowViewState.IdRef="RemoveDataColumn_3" />
-    <be:ShowDataTable AllowColumnWordWrap="False" DisplayName="Show DataTable" sap:VirtualizedContainerService.HintSize="535.2,22.4" sap2010:WorkflowViewState.IdRef="ShowDataTable_6" InputDataTable="[FinalTable]" Title="Datatable View" />
+    <be:ShowDataTable AllowColumnWordWrap="False" DisplayName="Show DataTable" sap:VirtualizedContainerService.HintSize="535.2,22.4" sap2010:WorkflowViewState.IdRef="ShowDataTable_6" InputDataTable="[FinalTable]" Title="Processed eligible\shortlisted students" />
     <Assign DisplayName="Assign - File Path + Company Name" sap:VirtualizedContainerService.HintSize="535.2,60" sap2010:WorkflowViewState.IdRef="Assign_1">
       <Assign.To>
         <OutArgument x:TypeArguments="x:String">[companyName]</OutArgument>
       </Assign.To>
       <Assign.Value>
-        <InArgument x:TypeArguments="x:String">[OutputFilePath + in_companyName + ".xlsx"]</InArgument>
+        <InArgument x:TypeArguments="x:String">[OutputFilePath + in_cName+ ".xlsx"]</InArgument>
       </Assign.Value>
     </Assign>
     <ui:WriteRange AddHeaders="True" sap2010:Annotation.AnnotationText="Desc: Writting the final data table to excel file." DataTable="[FinalTable]" DisplayName="Write Range" sap:VirtualizedContainerService.HintSize="535.2,147.2" sap2010:WorkflowViewState.IdRef="WriteRange_1" SheetName="Sheet1" StartingCell="A1" WorkbookPath="[companyName]">

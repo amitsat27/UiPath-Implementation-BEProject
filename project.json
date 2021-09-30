@@ -4,6 +4,7 @@
   "main": "MasterBot.xaml",
   "dependencies": {
     "BalaReva.EasyDataTable.Activities": "[3.0.1]",
+    "BalaReva.EasyExcel.Activities": "[29.0.0]",
     "BalaReva.ZipUnzipGz.Activities": "[2.0.0]",
     "UiPath.Excel.Activities": "[2.11.1-preview]",
     "UiPath.Form.Activities": "[1.6.0]",
@@ -16,7 +17,7 @@
   "entitiesStores": [],
   "schemaVersion": "4.0",
   "studioVersion": "21.4.4.0",
-  "projectVersion": "1.0.0",
+  "projectVersion": "1.0.1",
   "runtimeOptions": {
     "autoDispose": false,
     "isPausable": true,

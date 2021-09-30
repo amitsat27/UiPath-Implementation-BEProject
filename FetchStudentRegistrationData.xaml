@@ -1,18 +1,16 @@
-<Activity mc:Ignorable="sap sap2010" x:Class="ChangeDataType" xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:be="clr-namespace:BalaReva.EasyDataTable;assembly=BalaReva.EasyDataTable" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:mva="clr-namespace:Microsoft.VisualBasic.Activities;assembly=System.Activities" xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation" xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation" xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib" xmlns:sd="clr-namespace:System.Data;assembly=System.Data" xmlns:ui="http://schemas.uipath.com/workflow/activities" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+<Activity mc:Ignorable="sap sap2010" x:Class="ChangeDataType" xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:be="clr-namespace:BalaReva.EasyDataTable;assembly=BalaReva.EasyDataTable" xmlns:bem="clr-namespace:BalaReva.EasyExcel.Main;assembly=BalaReva.EasyExcel" xmlns:bes="clr-namespace:BalaReva.EasyExcel.Sheets;assembly=BalaReva.EasyExcel" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:mva="clr-namespace:Microsoft.VisualBasic.Activities;assembly=System.Activities" xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation" xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation" xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib" xmlns:sd="clr-namespace:System.Data;assembly=System.Data" xmlns:ui="http://schemas.uipath.com/workflow/activities" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <x:Members>
     <x:Property Name="in_percentage" Type="InArgument(x:Double)" />
-    <x:Property Name="in_departments" Type="scg:Dictionary(x:String, x:Boolean)" />
-    <x:Property Name="in_branchOutput" Type="x:String" />
-    <x:Property Name="in_formInput" Type="x:String" />
     <x:Property Name="in_BranchDT" Type="InArgument(sd:DataTable)" />
+    <x:Property Name="in_companyName" Type="InArgument(x:String)" />
   </x:Members>
   <mva:VisualBasic.Settings>
     <x:Null />
   </mva:VisualBasic.Settings>
-  <sap:VirtualizedContainerService.HintSize>788,2315.2</sap:VirtualizedContainerService.HintSize>
+  <sap:VirtualizedContainerService.HintSize>788,3544.8</sap:VirtualizedContainerService.HintSize>
   <sap2010:WorkflowViewState.IdRef>ChangeDataType_1</sap2010:WorkflowViewState.IdRef>
   <TextExpression.NamespacesForImplementation>
-    <scg:List x:TypeArguments="x:String" Capacity="36">
+    <scg:List x:TypeArguments="x:String" Capacity="72">
       <x:String>System.Activities</x:String>
       <x:String>System.Activities.Statements</x:String>
       <x:String>System.Activities.Expressions</x:String>
@@ -49,10 +47,15 @@
       <x:String>System.Dynamic</x:String>
       <x:String>System.Collections.Specialized</x:String>
       <x:String>Microsoft.VisualBasic.CompilerServices</x:String>
+      <x:String>UiPath.UIAutomationCore.Contracts</x:String>
+      <x:String>BalaReva.EasyExcel.Sheets</x:String>
+      <x:String>BalaReva.EasyExcel.Base</x:String>
+      <x:String>BalaReva.EasyExcel.Main</x:String>
+      <x:String>BalaReva.EasyExcel.Utilities</x:String>
     </scg:List>
   </TextExpression.NamespacesForImplementation>
   <TextExpression.ReferencesForImplementation>
-    <scg:List x:TypeArguments="AssemblyReference" Capacity="32">
+    <scg:List x:TypeArguments="AssemblyReference" Capacity="64">
       <AssemblyReference>System.Activities</AssemblyReference>
       <AssemblyReference>Microsoft.VisualBasic</AssemblyReference>
       <AssemblyReference>mscorlib</AssemblyReference>
@@ -84,15 +87,23 @@
       <AssemblyReference>UiPath.OCR.Activities.Design</AssemblyReference>
       <AssemblyReference>UiPath.System.Activities.Design</AssemblyReference>
       <AssemblyReference>Newtonsoft.Json</AssemblyReference>
+      <AssemblyReference>BalaReva.EasyExcel</AssemblyReference>
+      <AssemblyReference>BalaReva.EasyExcel.Utilities</AssemblyReference>
       <AssemblyReference>System.Runtime.WindowsRuntime</AssemblyReference>
     </scg:List>
   </TextExpression.ReferencesForImplementation>
-  <Sequence sap2010:Annotation.AnnotationText="Dec: Fetches two excel sheets StudentData and GrNumbers and joins tables using inner join and writes to a Company Sheet.xlsx file." DisplayName="Fetch Student Data" sap:VirtualizedContainerService.HintSize="375.2,2250.4" sap2010:WorkflowViewState.IdRef="Sequence_1">
+  <Sequence sap2010:Annotation.AnnotationText="Dec: Fetches two excel sheets StudentData and GrNumbers and joins tables using inner join and writes to a Company Sheet.xlsx file." DisplayName="Fetch Student Data" sap:VirtualizedContainerService.HintSize="576.8,3480" sap2010:WorkflowViewState.IdRef="Sequence_1">
     <Sequence.Variables>
       <Variable x:TypeArguments="sd:DataTable" Name="OutDT_GRNumbers" />
       <Variable x:TypeArguments="sd:DataTable" Name="OutDT_StudentData" />
       <Variable x:TypeArguments="sd:DataTable" Name="FinalTable" />
       <Variable x:TypeArguments="sd:DataTable" Name="BranchDT" />
+      <Variable x:TypeArguments="x:String" Name="companyName" />
+      <Variable x:TypeArguments="x:String" Name="OutputFilePath">
+        <Variable.Default>
+          <Literal x:TypeArguments="x:String">D:\Downloads\UiPath\ExcelAutomationDemo\Data\Output\</Literal>
+        </Variable.Default>
+      </Variable>
     </Sequence.Variables>
     <sap:WorkflowViewStateService.ViewState>
       <scg:Dictionary x:TypeArguments="x:String, x:Object">
@@ -100,25 +111,25 @@
         <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
       </scg:Dictionary>
     </sap:WorkflowViewStateService.ViewState>
-    <ui:ReadRange AddHeaders="True" DataTable="[OutDT_GRNumbers]" DisplayName="Read Range" sap:VirtualizedContainerService.HintSize="333.6,88" sap2010:WorkflowViewState.IdRef="ReadRange_1" SheetName="Sheet1" WorkbookPath="Data\GRnumbers.xlsx">
+    <ui:ReadRange AddHeaders="True" DataTable="[OutDT_GRNumbers]" DisplayName="Read Range - Read GR Number Input" sap:VirtualizedContainerService.HintSize="535.2,88" sap2010:WorkflowViewState.IdRef="ReadRange_1" SheetName="Sheet1" WorkbookPath="Data\GRnumbers.xlsx">
       <ui:ReadRange.Range>
         <InArgument x:TypeArguments="x:String">
           <Literal x:TypeArguments="x:String" Value="" />
         </InArgument>
       </ui:ReadRange.Range>
     </ui:ReadRange>
-    <be:ColumnDataTypeConvertor ColumnName="{x:Null}" NullValue="{x:Null}" ColumnDataType="x:Int32" ColumnIndex="[{0}]" DisplayName="Change Column DataType" sap:VirtualizedContainerService.HintSize="333.6,22.4" sap2010:WorkflowViewState.IdRef="ColumnDataTypeConvertor_1" InDataTable="[OutDT_GRNumbers]" OutDataTable="[OutDT_GRNumbers]" />
-    <be:ShowDataTable AllowColumnWordWrap="False" DisplayName="Show DataTable" sap:VirtualizedContainerService.HintSize="333.6,22.4" sap2010:WorkflowViewState.IdRef="ShowDataTable_1" InputDataTable="[OutDT_GRNumbers]" Title="Datatable View" />
-    <ui:ReadRange AddHeaders="True" DataTable="[OutDT_StudentData]" DisplayName="Read Range" sap:VirtualizedContainerService.HintSize="333.6,88" sap2010:WorkflowViewState.IdRef="ReadRange_2" SheetName="Sheet1" WorkbookPath="Data\StudentData.xlsx">
+    <be:ColumnDataTypeConvertor ColumnName="{x:Null}" NullValue="{x:Null}" ColumnDataType="x:Int32" ColumnIndex="[{0}]" DisplayName="Change Column DataType" sap:VirtualizedContainerService.HintSize="535.2,22.4" sap2010:WorkflowViewState.IdRef="ColumnDataTypeConvertor_1" InDataTable="[OutDT_GRNumbers]" OutDataTable="[OutDT_GRNumbers]" />
+    <be:ShowDataTable AllowColumnWordWrap="False" DisplayName="Show DataTable" sap:VirtualizedContainerService.HintSize="535.2,22.4" sap2010:WorkflowViewState.IdRef="ShowDataTable_1" InputDataTable="[OutDT_GRNumbers]" Title="Datatable View" />
+    <ui:ReadRange AddHeaders="True" DataTable="[OutDT_StudentData]" DisplayName="Read Range- Student Master Data" sap:VirtualizedContainerService.HintSize="535.2,88" sap2010:WorkflowViewState.IdRef="ReadRange_2" SheetName="Sheet1" WorkbookPath="Data\StudentData.xlsx">
       <ui:ReadRange.Range>
         <InArgument x:TypeArguments="x:String">
           <Literal x:TypeArguments="x:String" Value="" />
         </InArgument>
       </ui:ReadRange.Range>
     </ui:ReadRange>
-    <be:ColumnDataTypeConvertor ColumnName="{x:Null}" NullValue="{x:Null}" ColumnDataType="x:Int32" ColumnIndex="[{0}]" DisplayName="Change Column DataType" sap:VirtualizedContainerService.HintSize="333.6,22.4" sap2010:WorkflowViewState.IdRef="ColumnDataTypeConvertor_2" InDataTable="[OutDT_StudentData]" OutDataTable="[OutDT_StudentData]" />
-    <be:ShowDataTable AllowColumnWordWrap="False" DisplayName="Show DataTable" sap:VirtualizedContainerService.HintSize="333.6,22.4" sap2010:WorkflowViewState.IdRef="ShowDataTable_2" InputDataTable="[OutDT_StudentData]" Title="Datatable View" />
-    <ui:JoinDataTables DataTable1="[OutDT_StudentData]" DataTable2="[OutDT_GRNumbers]" DisplayName="Join Data Tables" sap:VirtualizedContainerService.HintSize="333.6,60" sap2010:WorkflowViewState.IdRef="JoinDataTables_1" JoinType="Inner" OutputDataTable="[FinalTable]">
+    <be:ColumnDataTypeConvertor ColumnName="{x:Null}" NullValue="{x:Null}" ColumnDataType="x:Int32" ColumnIndex="[{0}]" DisplayName="Change Column DataType" sap:VirtualizedContainerService.HintSize="535.2,22.4" sap2010:WorkflowViewState.IdRef="ColumnDataTypeConvertor_2" InDataTable="[OutDT_StudentData]" OutDataTable="[OutDT_StudentData]" />
+    <be:ShowDataTable AllowColumnWordWrap="False" DisplayName="Show DataTable" sap:VirtualizedContainerService.HintSize="535.2,22.4" sap2010:WorkflowViewState.IdRef="ShowDataTable_2" InputDataTable="[OutDT_StudentData]" Title="Datatable View" />
+    <ui:JoinDataTables sap2010:Annotation.AnnotationText="Desc: Fetching Data of Registered Students using GR Number from Student Master Data." DataTable1="[OutDT_StudentData]" DataTable2="[OutDT_GRNumbers]" DisplayName="Join Data Tables-  Fetching Student Data" sap:VirtualizedContainerService.HintSize="535.2,104" sap2010:WorkflowViewState.IdRef="JoinDataTables_1" JoinType="Inner" OutputDataTable="[FinalTable]">
       <ui:JoinDataTables.Arguments>
         <scg:List x:TypeArguments="ui:JoinOperationArgument" Capacity="4">
           <ui:JoinOperationArgument Operand="{x:Null}" BooleanOperator="And" Operator="EQ">
@@ -131,8 +142,13 @@
           </ui:JoinOperationArgument>
         </scg:List>
       </ui:JoinDataTables.Arguments>
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
     </ui:JoinDataTables>
-    <ui:FilterDataTable DataTable="[FinalTable]" DisplayName="Filter Data Table" FilterRowsMode="Keep" sap:VirtualizedContainerService.HintSize="333.6,162.4" sap2010:WorkflowViewState.IdRef="FilterDataTable_1" OutputDataTable="[FinalTable]" SelectColumnsMode="Keep">
+    <ui:FilterDataTable sap2010:Annotation.AnnotationText="Desc: Filtering data based on percentage criiteria set by company." DataTable="[FinalTable]" DisplayName="Filter Data Table - Percentage Criteria" FilterRowsMode="Keep" sap:VirtualizedContainerService.HintSize="535.2,206.4" sap2010:WorkflowViewState.IdRef="FilterDataTable_1" OutputDataTable="[FinalTable]" SelectColumnsMode="Keep">
       <ui:FilterDataTable.Filters>
         <scg:List x:TypeArguments="ui:FilterOperationArgument" Capacity="4">
           <ui:FilterOperationArgument BooleanOperator="And" Operator="GTE">
@@ -150,8 +166,13 @@
           <x:Null />
         </scg:List>
       </ui:FilterDataTable.SelectColumns>
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
     </ui:FilterDataTable>
-    <ui:FilterDataTable DataTable="[in_BranchDT]" DisplayName="Filter Data Table" FilterRowsMode="Keep" sap:VirtualizedContainerService.HintSize="333.6,162.4" sap2010:WorkflowViewState.IdRef="FilterDataTable_3" OutputDataTable="[in_BranchDT]" SelectColumnsMode="Keep">
+    <ui:FilterDataTable sap2010:Annotation.AnnotationText="Desc: Filtering based on branch/ department." DataTable="[in_BranchDT]" DisplayName="Filter Data Table - Branch Criteria" FilterRowsMode="Keep" sap:VirtualizedContainerService.HintSize="535.2,193.6" sap2010:WorkflowViewState.IdRef="FilterDataTable_3" OutputDataTable="[in_BranchDT]" SelectColumnsMode="Keep">
       <ui:FilterDataTable.Filters>
         <scg:List x:TypeArguments="ui:FilterOperationArgument" Capacity="4">
           <ui:FilterOperationArgument BooleanOperator="And" Operator="CONTAINS">
@@ -169,10 +190,26 @@
           <x:Null />
         </scg:List>
       </ui:FilterDataTable.SelectColumns>
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
     </ui:FilterDataTable>
-    <ui:RemoveDataColumn Column="{x:Null}" ColumnName="{x:Null}" ColumnIndex="1" DataTable="[in_BranchDT]" DisplayName="Remove Data Column" sap:VirtualizedContainerService.HintSize="333.6,188" sap2010:WorkflowViewState.IdRef="RemoveDataColumn_1" />
-    <be:ShowDataTable AllowColumnWordWrap="False" DisplayName="Show DataTable" sap:VirtualizedContainerService.HintSize="333.6,22.4" sap2010:WorkflowViewState.IdRef="ShowDataTable_7" InputDataTable="[in_BranchDT]" Title="Datatable View" />
-    <ui:JoinDataTables DataTable1="[FinalTable]" DataTable2="[in_BranchDT]" DisplayName="Join Data Tables" sap:VirtualizedContainerService.HintSize="333.6,60" sap2010:WorkflowViewState.IdRef="JoinDataTables_2" JoinType="Inner" OutputDataTable="[FinalTable]">
+    <ui:RemoveDataColumn Column="{x:Null}" ColumnName="{x:Null}" ColumnIndex="1" DataTable="[in_BranchDT]" DisplayName="Remove Data Column" sap:VirtualizedContainerService.HintSize="535.2,188" sap2010:WorkflowViewState.IdRef="RemoveDataColumn_1" />
+    <ui:CommentOut DisplayName="Debugging" sap:VirtualizedContainerService.HintSize="535.2,193.6" sap2010:WorkflowViewState.IdRef="CommentOut_1">
+      <ui:CommentOut.Body>
+        <Sequence DisplayName="Ignored Activities" sap:VirtualizedContainerService.HintSize="241.6,115.2" sap2010:WorkflowViewState.IdRef="Sequence_2">
+          <sap:WorkflowViewStateService.ViewState>
+            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            </scg:Dictionary>
+          </sap:WorkflowViewStateService.ViewState>
+          <be:ShowDataTable AllowColumnWordWrap="False" DisplayName="Show DataTable" sap:VirtualizedContainerService.HintSize="200,22.4" sap2010:WorkflowViewState.IdRef="ShowDataTable_7" InputDataTable="[in_BranchDT]" Title="Datatable View" />
+        </Sequence>
+      </ui:CommentOut.Body>
+    </ui:CommentOut>
+    <ui:JoinDataTables DataTable1="[FinalTable]" DataTable2="[in_BranchDT]" DisplayName="Join Data Tables- Updating with selected Criteria/s" sap:VirtualizedContainerService.HintSize="535.2,60" sap2010:WorkflowViewState.IdRef="JoinDataTables_2" JoinType="Inner" OutputDataTable="[FinalTable]">
       <ui:JoinDataTables.Arguments>
         <scg:List x:TypeArguments="ui:JoinOperationArgument" Capacity="4">
           <ui:JoinOperationArgument Operand="{x:Null}" BooleanOperator="And" Operator="EQ">
@@ -186,10 +223,71 @@
         </scg:List>
       </ui:JoinDataTables.Arguments>
     </ui:JoinDataTables>
-    <be:ShowDataTable AllowColumnWordWrap="False" DisplayName="Show DataTable" sap:VirtualizedContainerService.HintSize="333.6,22.4" sap2010:WorkflowViewState.IdRef="ShowDataTable_8" InputDataTable="[FinalTable]" Title="Datatable View" />
-    <ui:RemoveDataColumn Column="{x:Null}" ColumnName="{x:Null}" ColumnIndex="18" DataTable="[FinalTable]" DisplayName="Remove Data Column" sap:VirtualizedContainerService.HintSize="333.6,188" sap2010:WorkflowViewState.IdRef="RemoveDataColumn_2" />
-    <ui:RemoveDataColumn Column="{x:Null}" ColumnName="{x:Null}" ColumnIndex="17" DataTable="[FinalTable]" DisplayName="Remove Data Column" sap:VirtualizedContainerService.HintSize="333.6,188" sap2010:WorkflowViewState.IdRef="RemoveDataColumn_3" />
-    <be:ShowDataTable AllowColumnWordWrap="False" DisplayName="Show DataTable" sap:VirtualizedContainerService.HintSize="333.6,22.4" sap2010:WorkflowViewState.IdRef="ShowDataTable_6" InputDataTable="[FinalTable]" Title="Datatable View" />
-    <ui:WriteRange AddHeaders="False" DataTable="[FinalTable]" DisplayName="Write Range" sap:VirtualizedContainerService.HintSize="333.6,116" sap2010:WorkflowViewState.IdRef="WriteRange_1" SheetName="Sheet1" StartingCell="A1" WorkbookPath="Data\Output\CompanySheet.xlsx" />
+    <ui:CommentOut DisplayName="Debugging" sap:VirtualizedContainerService.HintSize="535.2,193.6" sap2010:WorkflowViewState.IdRef="CommentOut_2">
+      <ui:CommentOut.Body>
+        <Sequence DisplayName="Ignored Activities" sap:VirtualizedContainerService.HintSize="241.6,115.2" sap2010:WorkflowViewState.IdRef="Sequence_3">
+          <sap:WorkflowViewStateService.ViewState>
+            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            </scg:Dictionary>
+          </sap:WorkflowViewStateService.ViewState>
+          <be:ShowDataTable AllowColumnWordWrap="False" DisplayName="Show DataTable" sap:VirtualizedContainerService.HintSize="200,22.4" sap2010:WorkflowViewState.IdRef="ShowDataTable_8" InputDataTable="[FinalTable]" Title="Datatable View" />
+        </Sequence>
+      </ui:CommentOut.Body>
+    </ui:CommentOut>
+    <ui:RemoveDataColumn Column="{x:Null}" ColumnName="{x:Null}" ColumnIndex="18" DataTable="[FinalTable]" DisplayName="Remove Data Column" sap:VirtualizedContainerService.HintSize="535.2,188" sap2010:WorkflowViewState.IdRef="RemoveDataColumn_2" />
+    <ui:RemoveDataColumn Column="{x:Null}" ColumnName="{x:Null}" ColumnIndex="17" DataTable="[FinalTable]" DisplayName="Remove Data Column" sap:VirtualizedContainerService.HintSize="535.2,188" sap2010:WorkflowViewState.IdRef="RemoveDataColumn_3" />
+    <be:ShowDataTable AllowColumnWordWrap="False" DisplayName="Show DataTable" sap:VirtualizedContainerService.HintSize="535.2,22.4" sap2010:WorkflowViewState.IdRef="ShowDataTable_6" InputDataTable="[FinalTable]" Title="Datatable View" />
+    <Assign DisplayName="Assign - File Path + Company Name" sap:VirtualizedContainerService.HintSize="535.2,60" sap2010:WorkflowViewState.IdRef="Assign_1">
+      <Assign.To>
+        <OutArgument x:TypeArguments="x:String">[companyName]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="x:String">[OutputFilePath + in_companyName + ".xlsx"]</InArgument>
+      </Assign.Value>
+    </Assign>
+    <ui:WriteRange AddHeaders="True" sap2010:Annotation.AnnotationText="Desc: Writting the final data table to excel file." DataTable="[FinalTable]" DisplayName="Write Range" sap:VirtualizedContainerService.HintSize="535.2,147.2" sap2010:WorkflowViewState.IdRef="WriteRange_1" SheetName="Sheet1" StartingCell="A1" WorkbookPath="[companyName]">
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+    </ui:WriteRange>
+    <bem:ExcelScope FilePassword="{x:Null}" ModifyPassword="{x:Null}" DisplayAlerts="False" DisplayName="Formatting Excel File" FilePath="[companyName]" sap:VirtualizedContainerService.HintSize="535.2,612.8" sap2010:WorkflowViewState.IdRef="ExcelScope_1" UpdateAutoLinks="Default" Visible="False">
+      <bem:ExcelScope.Body>
+        <ActivityAction x:TypeArguments="bem:ExcelParam">
+          <ActivityAction.Argument>
+            <DelegateInArgument x:TypeArguments="bem:ExcelParam" Name="WorkBookObj" />
+          </ActivityAction.Argument>
+          <Sequence DisplayName="Body" sap:VirtualizedContainerService.HintSize="476.8,472" sap2010:WorkflowViewState.IdRef="Sequence_7">
+            <sap:WorkflowViewStateService.ViewState>
+              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+              </scg:Dictionary>
+            </sap:WorkflowViewStateService.ViewState>
+            <ui:CommentOut DisplayName="Comment Out" sap:VirtualizedContainerService.HintSize="435.2,193.6" sap2010:WorkflowViewState.IdRef="CommentOut_3">
+              <ui:CommentOut.Body>
+                <Sequence DisplayName="Ignored Activities" sap:VirtualizedContainerService.HintSize="241.6,115.2" sap2010:WorkflowViewState.IdRef="Sequence_8">
+                  <sap:WorkflowViewStateService.ViewState>
+                    <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                      <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                    </scg:Dictionary>
+                  </sap:WorkflowViewStateService.ViewState>
+                  <bes:ClearSheet ClearAll="{x:Null}" ClearComments="{x:Null}" ClearContents="{x:Null}" ClearFormats="{x:Null}" ClearHyperlinks="{x:Null}" ClearNotes="{x:Null}" ClearOutline="{x:Null}" ExecutionResult="{x:Null}" ContinueOnError="False" Delay="3" DisplayName="Clear" sap:VirtualizedContainerService.HintSize="200,22.4" sap2010:WorkflowViewState.IdRef="ClearSheet_1" SheetName="Sheet1">
+                    <bes:ClearSheet.CellRange>
+                      <InArgument x:TypeArguments="x:String">
+                        <Literal x:TypeArguments="x:String" Value="" />
+                      </InArgument>
+                    </bes:ClearSheet.CellRange>
+                  </bes:ClearSheet>
+                </Sequence>
+              </ui:CommentOut.Body>
+            </ui:CommentOut>
+            <bes:FillColor ExecutionResult="{x:Null}" PatternColor="{x:Null}" BackgroundColor="[System.Drawing.Color.Yellow]" CellRange="A1:Z1" ContinueOnError="False" Delay="3" DisplayName="Fill Color" sap:VirtualizedContainerService.HintSize="435.2,83.2" sap2010:WorkflowViewState.IdRef="FillColor_1" PatternStyle="None" SheetName="Sheet1" />
+            <bes:CellFont ExecutionResult="{x:Null}" FontName="{x:Null}" BackgroundColor="" CellRange="A1:Z1" ContinueOnError="False" Delay="3" DisplayName="Set Range Style" FontColor="" FontScript="None" FontSize="0" FontUnderLine="None" Font_Style="Bold" sap:VirtualizedContainerService.HintSize="435.2,22.4" sap2010:WorkflowViewState.IdRef="CellFont_1" SheetName="Sheet1" Strikethrough="None" />
+          </Sequence>
+        </ActivityAction>
+      </bem:ExcelScope.Body>
+    </bem:ExcelScope>
   </Sequence>
 </Activity>
